@@ -16,7 +16,7 @@ Commands for other device IDs are ignored.
 
 Every request should include `SEQ`; responses echo the same `SEQ`.
 
-On Arduino Nano, MAX485 direction control uses `D10` connected to `DE` and `/RE` together. The firmware drives `D10` HIGH while transmitting a response and LOW while listening.
+On Arduino Nano, MAX485 direction control uses `D2` connected to `DE` and `/RE` together. The firmware drives `D2` HIGH while transmitting a response and LOW while listening.
 
 ## ESP32 Integration
 

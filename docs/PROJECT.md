@@ -9,7 +9,7 @@ The Arduino receives addressed UART commands from a future ESP32-S3 main control
 - Target: Arduino Nano ATmega328P, 5V.
 - Transport now: UART Serial at `115200` baud.
 - RS485 transport: MAX485-compatible half-duplex bus using the same addressed protocol format.
-- RS485 direction control: Arduino `D10` drives MAX485 `DE` and `/RE` together, HIGH for transmit and LOW for receive.
+- RS485 direction control: Arduino `D2` drives MAX485 `DE` and `/RE` together, HIGH for transmit and LOW for receive.
 - Arduino GPIO pins drive MOSFET/load-switch/relay enable inputs only.
 - Do not power external devices directly from Arduino pins.
 - High-current VRX modules and transmitter boards require suitable external power supplies and switching hardware.
@@ -38,17 +38,17 @@ Initial devices:
 
 | ID | Group | Pin |
 | --- | --- | --- |
-| `rx3301` | `vrx` | `D2` |
-| `readytosky12` | `vrx` | `D3` |
-| `matek12` | `vrx` | `D4` |
-| `rx3364pro` | `vrx` | `D5` |
-| `tbs_fusion` | `vrx` | `D6` |
-| `ctrl_tx_1` | `ctrl_tx` | `D7` |
-| `ctrl_tx_2` | `ctrl_tx` | `D8` |
-| `ctrl_tx_3` | `ctrl_tx` | `D9` |
-| `skyzone_x` | `vrx` | `D11` |
+| `rx3301` | `vrx` | `D4` |
+| `readytosky12` | `vrx` | `D5` |
+| `matek12` | `vrx` | `D6` |
+| `rx3364pro` | `vrx` | `D7` |
+| `tbs_fusion` | `vrx` | `D8` |
+| `ctrl_tx_1` | `ctrl_tx` | `D9` |
+| `ctrl_tx_2` | `ctrl_tx` | `D10` |
+| `ctrl_tx_3` | `ctrl_tx` | `D11` |
+| `skyzone_x` | `vrx` | `D13` |
 
-`D2` drives an external relay/load-switch enable for RX3301; it does not power RX3301 directly. The first five `vrx` outputs (`D2..D6`) intentionally match the CrowPanel display order: RX3301, ReadyToSky, Matek, RX3364 Pro, then TBS Fusion. `D10` is reserved for RS485 direction control.
+`D2` is reserved for RS485 direction control. The first five `vrx` outputs (`D4..D8`) intentionally match the CrowPanel display order: RX3301, ReadyToSky, Matek, RX3364 Pro, then TBS Fusion. `D3` is free.
 
 All initial devices default to OFF at boot.
 
@@ -58,7 +58,7 @@ To add a device, add one row to `POWER_DEVICES[]` and update `POWER_DEVICE_COUNT
 
 Keep IDs short and stable because the ESP32 uses them in commands.
 
-Use pins `D2..D13` or `A0..A5` for outputs. Avoid `D0/D1` because they are UART. Avoid `A6/A7` because they are input-only on Nano.
+Use pins `D4..D13` or `A0..A5` for outputs. Avoid `D0/D1` because they are UART. Avoid `D2` because it is RS485 direction control. Avoid `A6/A7` because they are input-only on Nano.
 
 ## Startup Safety
 
