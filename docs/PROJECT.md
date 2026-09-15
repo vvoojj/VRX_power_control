@@ -38,17 +38,15 @@ Initial devices:
 
 | ID | Group | Pin |
 | --- | --- | --- |
-| `rx3301` | `vrx` | `D4` |
-| `readytosky12` | `vrx` | `D5` |
-| `matek12` | `vrx` | `D6` |
-| `rx3364pro` | `vrx` | `D7` |
-| `tbs_fusion` | `vrx` | `D8` |
+| `sk1200` | `vrx` | `D4` |
+| `rx3301` | `vrx` | `D5` |
+| `mm238rw` | `vrx` | `D6` |
+| `rx8200` | `vrx` | `D7` |
 | `ctrl_tx_1` | `ctrl_tx` | `D9` |
 | `ctrl_tx_2` | `ctrl_tx` | `D10` |
 | `ctrl_tx_3` | `ctrl_tx` | `D11` |
-| `skyzone_x` | `vrx` | `D13` |
 
-`D2` is reserved for RS485 direction control. The first five `vrx` outputs (`D4..D8`) intentionally match the CrowPanel display order: RX3301, ReadyToSky, Matek, RX3364 Pro, then TBS Fusion. `D3` is free.
+`D2` is reserved for RS485 direction control. The four `vrx` outputs (`D4..D7`) match the CrowPanel display order: SK1200, RX3301, MM238RW, then RX8200. `D3` and `D8` are free.
 
 All initial devices default to OFF at boot.
 

@@ -26,7 +26,7 @@ pio device monitor -e powerctl
 @powerctl GET_STATUS SEQ=3
 @powerctl SET ON=rx3301 SEQ=4
 @powerctl SET OFF=rx3301 SEQ=5
-@powerctl SET ON=rx3301 OFF=readytosky12,matek12,rx3364pro,tbs_fusion SEQ=6
+@powerctl SET ON=rx3301 OFF=sk1200,mm238rw,rx8200 SEQ=6
 @powerctl SET_GROUP GROUP=vrx STATE=OFF SEQ=7
 @powerctl ALL_OFF SEQ=8
 @powerctl SELFTEST SEQ=9

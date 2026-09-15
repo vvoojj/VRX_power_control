@@ -53,9 +53,9 @@ Request:
 Response is split per device to stay Nano-friendly:
 
 ```text
-@powerctl DEVICE SEQ=2 ID=rx3301 GROUP=vrx STATE=OFF PIN=2
-@powerctl DEVICE SEQ=2 ID=readytosky12 GROUP=vrx STATE=OFF PIN=3
-@powerctl LIST_DONE SEQ=2 COUNT=9
+@powerctl DEVICE SEQ=2 ID=sk1200 GROUP=vrx STATE=OFF PIN=4
+@powerctl DEVICE SEQ=2 ID=rx3301 GROUP=vrx STATE=OFF PIN=5
+@powerctl LIST_DONE SEQ=2 COUNT=7
 ```
 
 ## GET_STATUS
@@ -69,8 +69,8 @@ Request:
 Response:
 
 ```text
+@powerctl DEVICE_STATUS SEQ=3 ID=sk1200 STATE=ON
 @powerctl DEVICE_STATUS SEQ=3 ID=rx3301 STATE=OFF
-@powerctl DEVICE_STATUS SEQ=3 ID=readytosky12 STATE=ON
 @powerctl STATUS_DONE SEQ=3
 ```
 
@@ -91,26 +91,26 @@ Turn one device OFF:
 Turn multiple devices ON:
 
 ```text
-@powerctl SET ON=rx3301,readytosky12,matek12 SEQ=12
+@powerctl SET ON=sk1200,rx3301,mm238rw SEQ=12
 ```
 
 Turn multiple devices OFF:
 
 ```text
-@powerctl SET OFF=rx3301,readytosky12 SEQ=13
+@powerctl SET OFF=sk1200,rx3301 SEQ=13
 ```
 
 Switch RX3301 exclusively from the other display VRXs:
 
 ```text
-@powerctl SET ON=rx3301 OFF=readytosky12,matek12,rx3364pro,tbs_fusion SEQ=4
+@powerctl SET ON=rx3301 OFF=sk1200,mm238rw,rx8200 SEQ=4
 ```
 
 Responses:
 
 ```text
 @powerctl ACK SEQ=4 CMD=SET
-@powerctl DONE SEQ=4 ON=rx3301 OFF=readytosky12,matek12,rx3364pro,tbs_fusion
+@powerctl DONE SEQ=4 ON=rx3301 OFF=sk1200,mm238rw,rx8200
 ```
 
 Errors:
@@ -169,7 +169,7 @@ Safe default selftest:
 Response:
 
 ```text
-@powerctl SELFTEST SEQ=40 RESULT=PASS DEVICE_COUNT=9
+@powerctl SELFTEST SEQ=40 RESULT=PASS DEVICE_COUNT=7
 ```
 
 Default `SELFTEST` does not toggle outputs. It validates the config table for duplicate IDs, duplicate output pins, invalid pins, and valid device count.
