@@ -24,6 +24,7 @@ private:
     PowerController& _power;
     char _line[POWER_LINE_BUFFER_SIZE];
     uint8_t _lineLen;
+    bool _discardingLine;
     PendingKind _pendingKind;
     uint16_t _pendingSeq;
     DeviceIdList _pendingOn;

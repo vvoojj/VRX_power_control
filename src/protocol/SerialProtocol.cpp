@@ -2,9 +2,19 @@
 
 #include <string.h>
 
+static bool isAddressedToController(const char* line, char nextChar = '\0') {
+    const char* address = line + strspn(line, " \t\r\n");
+    const size_t addressLen = strcspn(address, " \t\r\n");
+    const bool completeAddress = address[addressLen] != '\0' ||
+                                 nextChar == '\0' || strchr(" \t\r\n", nextChar) != 0;
+    return completeAddress && addressLen == strlen(DEVICE_ID) + 1 && address[0] == '@' &&
+           strncmp(address + 1, DEVICE_ID, addressLen - 1) == 0;
+}
+
 SerialProtocol::SerialProtocol(PowerController& power)
     : _power(power),
       _lineLen(0),
+      _discardingLine(false),
       _pendingKind(PENDING_NONE),
       _pendingSeq(0),
       _pendingStateOn(false) {
@@ -19,6 +29,7 @@ void SerialProtocol::begin() {
     digitalWrite(POWER_RS485_DIRECTION_PIN, receiveHigh ? HIGH : LOW);
     pinMode(POWER_RS485_DIRECTION_PIN, OUTPUT);
     _lineLen = 0;
+    _discardingLine = false;
     _line[0] = '\0';
 }
 
@@ -34,30 +45,40 @@ void SerialProtocol::update() {
     while (Serial.available() > 0) {
         const char c = (char)Serial.read();
         if (c == '\n' || c == '\r') {
-            if (_lineLen > 0) {
+            if (!_discardingLine && _lineLen > 0) {
                 _line[_lineLen] = '\0';
                 handleLine(_line);
-                _lineLen = 0;
             }
+            _lineLen = 0;
+            _discardingLine = false;
+        } else if (_discardingLine) {
+            continue;
         } else if (_lineLen < POWER_LINE_BUFFER_SIZE - 1) {
             _line[_lineLen++] = c;
         } else {
+            _line[_lineLen] = '\0';
+            if (isAddressedToController(_line, c)) {
+                beginTransmit();
+                printErr(0, "LINE_TOO_LONG");
+                endTransmit();
+            }
             _lineLen = 0;
-            printErr(0, "LINE_TOO_LONG");
+            _discardingLine = true;
         }
     }
     pollCompletion();
 }
 
 void SerialProtocol::handleLine(char* line) {
+    if (!isAddressedToController(line)) {
+        return;
+    }
+
     ParsedCommand cmd;
     if (!Parser::parseLine(line, cmd)) {
         beginTransmit();
         printErr(0, "BAD_FORMAT");
         endTransmit();
-        return;
-    }
-    if (strcmp(cmd.device, DEVICE_ID) != 0) {
         return;
     }
     if (!cmd.hasSeq) {
